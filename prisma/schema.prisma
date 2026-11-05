@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+
+  // Quan hệ 1-N với Thực thể chính của đề thi
+  items        Item[]
+
+  @@map("users")
+}
+
+model Item {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Các trường nghiệp vụ chính (thay đổi theo đề thi)
+  title     String   // Tên: title / name / subject
+  amount    Float    // Giá trị: amount / price / quantity / score
+  category  String   // Phân loại: category / priority / department
+  note      String?  @default("") // Ghi chú: note / description
+  starred   Boolean  @default(false) // Đánh dấu: starred / isFeatured / isCompleted
+  spentAt   DateTime @default(now()) // Thời gian: spentAt / dueDate / releaseDate
+  createdAt DateTime @default(now())
+
+  @@map("items") // Đổi thành tên bảng: expenses / products / tasks / bookings
+}
