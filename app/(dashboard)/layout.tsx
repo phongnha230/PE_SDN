@@ -1,6 +1,7 @@
 import React from 'react'
 import { redirect } from 'next/navigation'
 import { getAuthenticatedUser } from '@/lib/auth'
+import prisma from '@/lib/prisma'
 import { Navbar } from '@/components/Navbar'
 import { ReadingLogProvider } from '@/features/reading-logs'
 
@@ -9,8 +10,17 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const user = await getAuthenticatedUser()
-  if (!user) {
+  const userPayload = await getAuthenticatedUser()
+  if (!userPayload) {
+    redirect('/login')
+  }
+
+  const dbUser = await prisma.user.findUnique({
+    where: { id: userPayload.id },
+    select: { id: true },
+  })
+
+  if (!dbUser) {
     redirect('/login')
   }
 

@@ -60,6 +60,11 @@ export function ReadingLogProvider({ children }: { children: React.ReactNode }) 
         fetch(`/api/reading-logs/summary${queryString}`),
       ])
 
+      if (logsRes.status === 401 || summaryRes.status === 401) {
+        window.location.href = '/login'
+        return
+      }
+
       if (logsRes.ok) {
         const data = await logsRes.json()
         setReadingLogs(data)
