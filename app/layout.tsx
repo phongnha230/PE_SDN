@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PE SDN302 Exam Boilerplate',
-  description: 'Universal Reusable Boilerplate for PE SDN302 Exam',
+  title: 'ReadLog - Personal Reading Tracker',
+  description: 'Track your personal reading sessions, minutes read, and favorite books.',
 }
 
 export default function RootLayout({

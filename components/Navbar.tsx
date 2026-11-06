@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { LogOut, User as UserIcon } from 'lucide-react'
+import { LogOut, User as UserIcon, BookOpen } from 'lucide-react'
 
 export function Navbar() {
   const router = useRouter()
@@ -12,11 +12,12 @@ export function Navbar() {
 
   useEffect(() => {
     fetch('/api/auth/me')
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) return null
+        return res.json()
+      })
       .then((data) => {
-        if (data.user?.email) {
-          setUserEmail(data.user.email)
-        } else if (data.email) {
+        if (data?.email) {
           setUserEmail(data.email)
         }
       })
@@ -40,21 +41,21 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm font-black text-lg">
-              PE
+            <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+              <BookOpen className="w-5 h-5" />
             </div>
-            <span data-testid="home-title" className="font-bold text-slate-900 dark:text-slate-100 text-base sm:text-lg tracking-tight">
-              ExpenseTrail
+            <span className="font-bold text-slate-900 dark:text-slate-100 text-base sm:text-lg tracking-tight">
+              ReadLog
             </span>
           </Link>
 
           {userEmail && (
             <Link
-              href="/dashboard"
-              data-testid="link-expenses"
-              className="text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 ml-4 hidden sm:inline-block"
+              href="/reading-logs"
+              data-testid="link-reading-logs"
+              className="text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 ml-2 sm:ml-4 inline-block"
             >
-              Dashboard
+              Reading Logs
             </Link>
           )}
         </div>
@@ -62,12 +63,11 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           {userEmail ? (
             <>
-              <div
-                data-testid="user-email"
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300"
-              >
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
                 <UserIcon className="w-3.5 h-3.5 text-slate-400" />
-                <span className="max-w-[150px] sm:max-w-[200px] truncate">{userEmail}</span>
+                <span data-testid="user-email" className="max-w-[150px] sm:max-w-[200px] truncate">
+                  {userEmail}
+                </span>
               </div>
 
               <button

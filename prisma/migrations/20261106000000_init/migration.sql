@@ -9,22 +9,22 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
-CREATE TABLE "items" (
+CREATE TABLE "reading_logs" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "amount" DOUBLE PRECISION NOT NULL,
-    "category" TEXT NOT NULL,
+    "bookTitle" TEXT NOT NULL,
+    "minutesRead" INTEGER NOT NULL,
+    "genre" TEXT NOT NULL,
     "note" TEXT DEFAULT '',
-    "starred" BOOLEAN NOT NULL DEFAULT false,
-    "spentAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "favorite" BOOLEAN NOT NULL DEFAULT false,
+    "readOn" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "items_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "reading_logs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
-ALTER TABLE "items" ADD CONSTRAINT "items_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "reading_logs" ADD CONSTRAINT "reading_logs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
